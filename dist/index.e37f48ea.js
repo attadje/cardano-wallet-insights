@@ -142,13 +142,13 @@
       this[globalName] = mainExports;
     }
   }
-})({"l7prB":[function(require,module,exports) {
+})({"ddCAb":[function(require,module,exports) {
 "use strict";
 var HMR_HOST = null;
 var HMR_PORT = null;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "d6ea1d42532a7575";
-module.bundle.HMR_BUNDLE_ID = "ca2744a0cad701ec";
+module.bundle.HMR_BUNDLE_ID = "d113fd8ce37f48ea";
 function _toConsumableArray(arr) {
     return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
 }
@@ -518,7 +518,22 @@ function hmrAcceptRun(bundle, id) {
     acceptedAssets[id] = true;
 }
 
-},{}],"Y4A21":[function(require,module,exports) {
+},{}],"aenu9":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+var _modelJs = require("./model.js");
+var _config = require("./config");
+var _rewardsHistViewJs = require("./views/rewardsHistView.js");
+var _rewardsHistViewJsDefault = parcelHelpers.interopDefault(_rewardsHistViewJs);
+var _utilJs = require("./util.js");
+const controlRewardsHist = async function() {
+    const rewards_hist = await _modelJs.reward_history(_config.STAKE_ADDR);
+    const adaRewards = rewards_hist.y.flatMap((x)=>_utilJs.lovelanceToAda(x)
+    );
+    _rewardsHistViewJsDefault.default.generateChart(rewards_hist.x, adaRewards);
+};
+controlRewardsHist();
+
+},{"./model.js":"Y4A21","./config":"k5Hzs","./views/rewardsHistView.js":"13Alb","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./util.js":"doATT"}],"Y4A21":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state
@@ -532,7 +547,6 @@ const state = {
     network: _configJs.BF_NETWORK.mainnet
 };
 const reward_history = async function(stake_adrr) {
-    console.log(`${state.network}/metrics/`);
     const rewards_hist = await _utilJs.AJAX(`${state.network}/accounts/${stake_adrr}/rewards`);
     const epochs = [];
     const rewards = [];
@@ -554,8 +568,6 @@ parcelHelpers.export(exports, "BF_APIKEY", ()=>BF_APIKEY
 );
 parcelHelpers.export(exports, "BF_NETWORK", ()=>BF_NETWORK
 );
-parcelHelpers.export(exports, "BF_PARAM_HEADER", ()=>BF_PARAM_HEADER
-);
 parcelHelpers.export(exports, "STAKE_ADDR", ()=>STAKE_ADDR
 );
 parcelHelpers.export(exports, "TIMEOUT_SEC", ()=>TIMEOUT_SEC
@@ -566,7 +578,6 @@ const BF_NETWORK = {
     testnet: "	https://cardano-testnet.blockfrost.io/api/v0",
     ipfs: "https://ipfs.blockfrost.io/api/v0"
 };
-const BF_PARAM_HEADER = "Authorization";
 const STAKE_ADDR = "stake1uyttshgm6jtejckv48tll58hfw3fg2ffrcc4d5qvcc4yc7q9jsalf";
 const TIMEOUT_SEC = 120;
 
@@ -605,14 +616,11 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "AJAX", ()=>AJAX
 );
+parcelHelpers.export(exports, "lovelanceToAda", ()=>lovelanceToAda
+);
 var _config = require("./config");
 var bf_header = new Headers();
 bf_header.append("project_id", "mainnetiSXrfNxhpPChKCnts2KX9MJ1eQ7exYgb");
-console.log(bf_header);
-var myInit = {
-    method: "GET",
-    headers: bf_header
-};
 const timeout = function(s) {
     return new Promise(function(_, reject) {
         setTimeout(function() {
@@ -643,7 +651,139 @@ const AJAX = async function(url, uploadData) {
         throw err;
     }
 };
+const lovelanceToAda = (lovelance)=>lovelance / 1000000
+;
 
-},{"./config":"k5Hzs","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["l7prB","Y4A21"], "Y4A21", "parcelRequire3ffb")
+},{"./config":"k5Hzs","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"13Alb":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+class rewardsHistView {
+    _ctx = document.getElementById("chartBig1").getContext("2d");
+    generateChart(epochs, rewards) {
+        var gradientStroke = this._ctx.createLinearGradient(0, 230, 0, 50);
+        gradientStroke.addColorStop(1, "rgba(72,72,176,0.1)");
+        gradientStroke.addColorStop(0.4, "rgba(72,72,176,0.0)");
+        gradientStroke.addColorStop(0, "rgba(119,52,169,0)"); //purple colors
+        var config = {
+            type: "line",
+            data: {
+                labels: epochs,
+                datasets: [
+                    {
+                        label: "Rewards",
+                        fill: true,
+                        backgroundColor: gradientStroke,
+                        borderColor: "#d346b1",
+                        borderWidth: 2,
+                        borderDash: [],
+                        borderDashOffset: 0,
+                        pointBackgroundColor: "#d346b1",
+                        pointBorderColor: "rgba(255,255,255,0)",
+                        pointHoverBackgroundColor: "#d346b1",
+                        pointBorderWidth: 20,
+                        pointHoverRadius: 4,
+                        pointHoverBorderWidth: 15,
+                        pointRadius: 4,
+                        data: rewards
+                    }, 
+                ]
+            },
+            options: {
+                maintainAspectRatio: false,
+                legend: {
+                    display: false
+                },
+                tooltips: {
+                    backgroundColor: "#f5f5f5",
+                    titleFontColor: "#333",
+                    bodyFontColor: "#666",
+                    bodySpacing: 4,
+                    xPadding: 12,
+                    mode: "nearest",
+                    intersect: 0,
+                    position: "nearest"
+                },
+                responsive: true,
+                scales: {
+                    yAxes: [
+                        {
+                            barPercentage: 1.6,
+                            gridLines: {
+                                drawBorder: false,
+                                color: "rgba(225,78,202,0.1)",
+                                zeroLineColor: "rgba(225,78,202,0.1)"
+                            },
+                            ticks: {
+                                // suggestedMin: 60,
+                                // suggestedMax: 125,
+                                padding: 20,
+                                fontColor: "#9a9a9a",
+                                callback: function(val, index) {
+                                    // Hide every 2nd tick label
+                                    return index % 2 === 0 ? val : "";
+                                }
+                            }
+                        }, 
+                    ],
+                    xAxes: [
+                        {
+                            barPercentage: 1.6,
+                            gridLines: {
+                                drawBorder: false,
+                                color: "rgba(225,78,202,0.0)",
+                                zeroLineColor: "transparent"
+                            },
+                            ticks: {
+                                padding: 20,
+                                fontColor: "#9a9a9a",
+                                callback: function(val, index) {
+                                    // Hide every 2nd tick label
+                                    return index % 4 === 0 ? val : "";
+                                }
+                            }
+                        }, 
+                    ]
+                }
+            }
+        };
+        var myChartData = new Chart(this._ctx, config);
+        document.querySelector("#allEpochs").addEventListener("click", function() {
+            var data = myChartData.config.data;
+            data.datasets[0].data = rewards;
+            data.labels = epochs;
+            myChartData.update();
+        });
+        document.querySelector("#mEpochs").addEventListener("click", function() {
+            var chart_data = rewards.slice(rewards.length - 18, rewards.length);
+            var data = myChartData.config.data;
+            data.datasets[0].data = chart_data;
+            data.labels = epochs.slice(epochs.length - 18, epochs.length);
+            myChartData.update();
+        });
+        document.querySelector("#yEpochs").addEventListener("click", function() {
+            var chart_data = [
+                60,
+                80,
+                65,
+                130,
+                80,
+                105,
+                90,
+                130,
+                70,
+                115,
+                60,
+                130
+            ];
+            var data = myChartData.config.data;
+            data.datasets[0].data = chart_data;
+            data.labels = chart_labels;
+            myChartData.update();
+        });
+    }
+}
+exports.default = new rewardsHistView();
 
-//# sourceMappingURL=index.cad701ec.js.map
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["ddCAb","aenu9"], "aenu9", "parcelRequire3ffb")
+
+//# sourceMappingURL=index.e37f48ea.js.map

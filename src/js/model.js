@@ -1,30 +1,23 @@
-const Blockfrost = require("@blockfrost/blockfrost-js");
-// import { BlockFrostAPI } from '@blockfrost/blockfrost-js'; // using import syntax
+import { BF_APIKEY, BF_NETWORK, STAKE_ADDR } from "./config.js";
+import { AJAX } from "./util.js";
 
-const API = new Blockfrost.BlockFrostAPI({
-  projectId: "", // see: https://blockfrost.io
-});
+export const state = {
+  api_key: BF_APIKEY,
+  network: BF_NETWORK.mainnet,
+};
 
-async function runExample() {
-  try {
-    const latestBlock = await API.blocksLatest();
-    const networkInfo = await API.network();
-    const latestEpoch = await API.epochsLatest();
-    const health = await API.health();
-    const address = await API.addresses(
-      "addr1qxqs59lphg8g6qndelq8xwqn60ag3aeyfcp33c2kdp46a09re5df3pzwwmyq946axfcejy5n4x0y99wqpgtp2gd0k09qsgy6pz"
-    );
-    const pools = await API.pools({ page: 1, count: 10, order: "asc" });
+export const reward_history = async function (stake_adrr) {
+  const rewards_hist = await AJAX(
+    `${state.network}/accounts/${stake_adrr}/rewards`
+  );
+  const epochs = [];
+  const rewards = [];
+  rewards_hist.forEach(function (item) {
+    epochs.push(item.epoch);
+    rewards.push(item.amount);
+  });
 
-    console.log("pools", pools);
-    console.log("address", address);
-    console.log("networkInfo", networkInfo);
-    console.log("latestEpoch", latestEpoch);
-    console.log("latestBlock", latestBlock);
-    console.log("health", health);
-  } catch (err) {
-    console.log("error", err);
-  }
-}
+  return { x: epochs, y: rewards };
 
-runExample();
+  //cardano-mainnet.blockfrost.io/api/v0/accounts/{stake_address}/rewards
+};

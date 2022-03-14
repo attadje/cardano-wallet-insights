@@ -84,7 +84,7 @@
                                 u(parseInt(e[1]), 0, 360),
                                 u(parseFloat(e[2]), 0, 100),
                                 u(parseFloat(e[3]), 0, 100),
-                                u(isNaN(n) ? 1 : n, 0, 1)
+                                u(isNaN(n) ? 1 : n, 0, 1), 
                             ];
                         }
                     }
@@ -98,7 +98,7 @@
                                 u(parseInt(e[1]), 0, 360),
                                 u(parseFloat(e[2]), 0, 100),
                                 u(parseFloat(e[3]), 0, 100),
-                                u(isNaN(n) ? 1 : n, 0, 1)
+                                u(isNaN(n) ? 1 : n, 0, 1), 
                             ];
                         }
                     }
@@ -164,7 +164,7 @@
             },
             {
                 6: 6
-            }
+            }, 
         ],
         3: [
             function(t3, e2, n3) {
@@ -403,7 +403,7 @@
                         return this.rgb();
                     },
                     clone: function() {
-                        var t, e, n = new o1, i = this.values, a = n.values;
+                        var t, e, n = new o1(), i = this.values, a = n.values;
                         for(var r in i)i.hasOwnProperty(r) && (t = i[r], "[object Array]" === (e = ({
                         }).toString.call(t)) ? a[r] = t.slice(0) : "[object Number]" === e ? a[r] = t : console.error("unexpected color value:", t));
                         return n;
@@ -494,7 +494,7 @@
             {
                 2: 2,
                 5: 5
-            }
+            }, 
         ],
         4: [
             function(t4, e3, n4) {
@@ -519,7 +519,7 @@
                     return [
                         i3(t)[0],
                         100 * (1 / 255 * Math.min(e, Math.min(n, a))),
-                        100 * (a = 1 - 1 / 255 * Math.max(e, Math.max(n, a)))
+                        100 * (a = 1 - 1 / 255 * Math.max(e, Math.max(n, a))), 
                     ];
                 }
                 function l1(t) {
@@ -539,7 +539,7 @@
                     return [
                         100 * (0.4124 * (e = e > 0.04045 ? Math.pow((e + 0.055) / 1.055, 2.4) : e / 12.92) + 0.3576 * (n = n > 0.04045 ? Math.pow((n + 0.055) / 1.055, 2.4) : n / 12.92) + 0.1805 * (i = i > 0.04045 ? Math.pow((i + 0.055) / 1.055, 2.4) : i / 12.92)),
                         100 * (0.2126 * e + 0.7152 * n + 0.0722 * i),
-                        100 * (0.0193 * e + 0.1192 * n + 0.9505 * i)
+                        100 * (0.0193 * e + 0.1192 * n + 0.9505 * i), 
                     ];
                 }
                 function d(t) {
@@ -1547,12 +1547,12 @@
                 for(var _ in S)C[JSON.stringify(S[_])] = _;
             },
             {
-            }
+            }, 
         ],
         5: [
             function(t5, e4, n5) {
                 var i4 = t5(4), a4 = function() {
-                    return new u;
+                    return new u();
                 };
                 for(var o in i4){
                     a4[o + "Raw"] = (function(t) {
@@ -1603,7 +1603,7 @@
             },
             {
                 4: 4
-            }
+            }, 
         ],
         6: [
             function(t, e, n) {
@@ -2352,7 +2352,7 @@
                 };
             },
             {
-            }
+            }, 
         ],
         7: [
             function(t, e, n) {
@@ -2401,7 +2401,7 @@
                 57: 57,
                 8: 8,
                 9: 9
-            }
+            }, 
         ],
         8: [
             function(t6, e5, n6) {
@@ -2413,7 +2413,7 @@
                 };
             },
             {
-            }
+            }, 
         ],
         9: [
             function(t7, e6, n7) {
@@ -2425,7 +2425,7 @@
                 };
             },
             {
-            }
+            }, 
         ],
         10: [
             function(t8, e7, n8) {
@@ -2437,7 +2437,7 @@
                 };
             },
             {
-            }
+            }, 
         ],
         11: [
             function(t9, e8, n9) {
@@ -2449,7 +2449,7 @@
                 };
             },
             {
-            }
+            }, 
         ],
         12: [
             function(t10, e9, n10) {
@@ -2461,7 +2461,7 @@
                 };
             },
             {
-            }
+            }, 
         ],
         13: [
             function(t11, e10, n11) {
@@ -2473,7 +2473,7 @@
                 };
             },
             {
-            }
+            }, 
         ],
         14: [
             function(t12, e11, n12) {
@@ -2485,7 +2485,7 @@
                 };
             },
             {
-            }
+            }, 
         ],
         15: [
             function(t13, e12, n13) {
@@ -2505,7 +2505,7 @@
                                 gridLines: {
                                     offsetGridLines: !0
                                 }
-                            }
+                            }, 
                         ],
                         yAxes: [
                             {
@@ -2535,7 +2535,7 @@
                                 gridLines: {
                                     offsetGridLines: !0
                                 }
-                            }
+                            }, 
                         ]
                     },
                     elements: {
@@ -2662,7 +2662,7 @@
                 25: 25,
                 40: 40,
                 45: 45
-            }
+            }, 
         ],
         16: [
             function(t15, e13, n14) {
@@ -2748,7 +2748,7 @@
                                 "hoverBorderWidth",
                                 "hoverRadius",
                                 "hitRadius",
-                                "pointStyle"
+                                "pointStyle", 
                             ];
                             for(n = 0, i = p.length; n < i; ++n)f[a = p[n]] = c([
                                 u[a],
@@ -2769,7 +2769,7 @@
                 25: 25,
                 40: 40,
                 45: 45
-            }
+            }, 
         ],
         17: [
             function(t17, e14, n16) {
@@ -2912,7 +2912,7 @@
                 25: 25,
                 40: 40,
                 45: 45
-            }
+            }, 
         ],
         18: [
             function(t19, e15, n19) {
@@ -3040,7 +3040,7 @@
                 25: 25,
                 40: 40,
                 45: 45
-            }
+            }, 
         ],
         19: [
             function(t22, e18, n21) {
@@ -3156,7 +3156,7 @@
                 25: 25,
                 40: 40,
                 45: 45
-            }
+            }, 
         ],
         20: [
             function(t24, e20, n23) {
@@ -3243,7 +3243,7 @@
                 25: 25,
                 40: 40,
                 45: 45
-            }
+            }, 
         ],
         21: [
             function(t26, e, n) {
@@ -3285,7 +3285,7 @@
             },
             {
                 25: 25
-            }
+            }, 
         ],
         22: [
             function(t27, e21, n25) {
@@ -3363,7 +3363,7 @@
                 25: 25,
                 26: 26,
                 45: 45
-            }
+            }, 
         ],
         23: [
             function(t29, e23, n26) {
@@ -3731,7 +3731,7 @@
                 28: 28,
                 45: 45,
                 48: 48
-            }
+            }, 
         ],
         24: [
             function(t34, e29, n30) {
@@ -3882,7 +3882,7 @@
             },
             {
                 45: 45
-            }
+            }, 
         ],
         25: [
             function(t, e33, n) {
@@ -3897,7 +3897,7 @@
             },
             {
                 45: 45
-            }
+            }, 
         ],
         26: [
             function(t37, e34, n32) {
@@ -3951,7 +3951,7 @@
             {
                 3: 3,
                 45: 45
-            }
+            }, 
         ],
         27: [
             function(t38, e35, n33) {
@@ -3976,7 +3976,7 @@
                                 }, l = i[e];
                                 "scales" === e ? n[e] = o13.scaleMerge(r, l) : "scale" === e ? n[e] = o13.merge(r, [
                                     t39.scaleService.getScaleDefaults(l.type),
-                                    l
+                                    l, 
                                 ]) : o13._merger(e, n, i, a);
                             }
                         });
@@ -3988,7 +3988,7 @@
                                     for(n[e] || (n[e] = []), r = 0; r < u; ++r)s = i[e][r], l = o13.valueOrDefault(s.type, "xAxes" === e ? "category" : "linear"), r >= n[e].length && n[e].push({
                                     }), !n[e][r].type || s.type && s.type !== n[e][r].type ? o13.merge(n[e][r], [
                                         t39.scaleService.getScaleDefaults(l),
-                                        s
+                                        s, 
                                     ]) : o13.merge(n[e][r], s);
                                 } else o13._merger(e, n, i, a);
                             }
@@ -4167,7 +4167,7 @@
                 25: 25,
                 3: 3,
                 45: 45
-            }
+            }, 
         ],
         28: [
             function(t45, e39, n35) {
@@ -4271,7 +4271,7 @@
             },
             {
                 45: 45
-            }
+            }, 
         ],
         29: [
             function(t53, e41, n) {
@@ -4285,7 +4285,7 @@
                         "mouseout",
                         "click",
                         "touchstart",
-                        "touchmove"
+                        "touchmove", 
                     ],
                     hover: {
                         onHover: null,
@@ -4319,7 +4319,7 @@
             },
             {
                 25: 25
-            }
+            }, 
         ],
         30: [
             function(t55, e42, n38) {
@@ -4461,7 +4461,7 @@
             },
             {
                 45: 45
-            }
+            }, 
         ],
         31: [
             function(t60, e47, n40) {
@@ -4529,7 +4529,7 @@
                 25: 25,
                 26: 26,
                 45: 45
-            }
+            }, 
         ],
         32: [
             function(t65, e48, n41) {
@@ -4885,7 +4885,7 @@
                 26: 26,
                 34: 34,
                 45: 45
-            }
+            }, 
         ],
         33: [
             function(t68, e51, n43) {
@@ -4926,7 +4926,7 @@
             {
                 25: 25,
                 45: 45
-            }
+            }, 
         ],
         34: [
             function(t70, e52, n44) {
@@ -4980,7 +4980,7 @@
             },
             {
                 45: 45
-            }
+            }, 
         ],
         35: [
             function(t71, e53, n45) {
@@ -5345,7 +5345,7 @@
                 25: 25,
                 26: 26,
                 45: 45
-            }
+            }, 
         ],
         36: [
             function(t76, e57, n47) {
@@ -5406,7 +5406,7 @@
                 25: 25,
                 26: 26,
                 45: 45
-            }
+            }, 
         ],
         37: [
             function(t77, e58, n48) {
@@ -5439,7 +5439,7 @@
                 25: 25,
                 26: 26,
                 45: 45
-            }
+            }, 
         ],
         38: [
             function(t78, e59, n49) {
@@ -5501,7 +5501,7 @@
                 25: 25,
                 26: 26,
                 45: 45
-            }
+            }, 
         ],
         39: [
             function(t79, e60, n50) {
@@ -5562,7 +5562,7 @@
                             [
                                 n,
                                 a
-                            ]
+                            ], 
                         ], b = [
                             "bottom",
                             "left",
@@ -5624,7 +5624,7 @@
             {
                 25: 25,
                 26: 26
-            }
+            }, 
         ],
         40: [
             function(t, e, n) {
@@ -5637,7 +5637,7 @@
                 37: 37,
                 38: 38,
                 39: 39
-            }
+            }, 
         ],
         41: [
             function(t80, e61, n51) {
@@ -5709,7 +5709,7 @@
             },
             {
                 42: 42
-            }
+            }, 
         ],
         42: [
             function(t81, e62, n52) {
@@ -5799,7 +5799,7 @@
                         }, a = function() {
                             this.constructor = n;
                         };
-                        return a.prototype = e.prototype, n.prototype = new a, n.extend = i.inherits, t && i.extend(n.prototype, t), n.__super__ = e.prototype, n;
+                        return a.prototype = e.prototype, n.prototype = new a(), n.extend = i.inherits, t && i.extend(n.prototype, t), n.__super__ = e.prototype, n;
                     }
                 };
                 e62.exports = i, i.callCallback = i.callback, i.indexOf = function(t, e, n) {
@@ -5807,7 +5807,7 @@
                 }, i.getValueOrDefault = i.valueOrDefault, i.getValueAtIndexOrDefault = i.valueAtIndexOrDefault;
             },
             {
-            }
+            }, 
         ],
         43: [
             function(t82, e64, n53) {
@@ -5919,7 +5919,7 @@
             },
             {
                 42: 42
-            }
+            }, 
         ],
         44: [
             function(t83, e65, n54) {
@@ -5956,7 +5956,7 @@
             },
             {
                 42: 42
-            }
+            }, 
         ],
         45: [
             function(t, e, n) {
@@ -5968,7 +5968,7 @@
                 42: 42,
                 43: 43,
                 44: 44
-            }
+            }, 
         ],
         46: [
             function(t84, e, n) {
@@ -5979,7 +5979,7 @@
                 };
             },
             {
-            }
+            }, 
         ],
         47: [
             function(t85, e66, n55) {
@@ -6169,7 +6169,7 @@
             },
             {
                 45: 45
-            }
+            }, 
         ],
         48: [
             function(t, e, n) {
@@ -6192,7 +6192,7 @@
                 45: 45,
                 46: 46,
                 47: 47
-            }
+            }, 
         ],
         49: [
             function(t89, e71, n56) {
@@ -6315,7 +6315,7 @@
                 25: 25,
                 40: 40,
                 45: 45
-            }
+            }, 
         ],
         50: [
             function(t92, e74, n58) {
@@ -6521,7 +6521,7 @@
                 25: 25,
                 26: 26,
                 45: 45
-            }
+            }, 
         ],
         51: [
             function(t96, e77, n63) {
@@ -6609,7 +6609,7 @@
                 25: 25,
                 26: 26,
                 45: 45
-            }
+            }, 
         ],
         52: [
             function(t98, e79, n65) {
@@ -6666,7 +6666,7 @@
                 };
             },
             {
-            }
+            }, 
         ],
         53: [
             function(t100, e81, n66) {
@@ -6698,7 +6698,7 @@
                                     var l = i37.getDatasetMeta(r), u = [
                                         l.type,
                                         void 0 === n68.stacked && void 0 === l.stack ? r : "",
-                                        l.stack
+                                        l.stack, 
                                     ].join(".");
                                     void 0 === s[u] && (s[u] = {
                                         positiveValues: [],
@@ -6756,7 +6756,7 @@
                 25: 25,
                 34: 34,
                 45: 45
-            }
+            }, 
         ],
         54: [
             function(t103, e83, n69) {
@@ -6798,7 +6798,7 @@
             {
                 34: 34,
                 45: 45
-            }
+            }, 
         ],
         55: [
             function(t105, e85, n70) {
@@ -6830,7 +6830,7 @@
                                     var l = o25.getDatasetMeta(r), s = [
                                         l.type,
                                         void 0 === n72.stacked && void 0 === l.stack ? r : "",
-                                        l.stack
+                                        l.stack, 
                                     ].join(".");
                                     o25.isDatasetVisible(r) && t107(l) && (void 0 === d[s] && (d[s] = []), i38.each(a32.data, function(t, i) {
                                         var a = d[s], o = +e.getRightValue(t);
@@ -6880,7 +6880,7 @@
             {
                 34: 34,
                 45: 45
-            }
+            }, 
         ],
         56: [
             function(t108, e87, n73) {
@@ -7106,7 +7106,7 @@
                 25: 25,
                 34: 34,
                 45: 45
-            }
+            }, 
         ],
         57: [
             function(t110, e91, n75) {
@@ -7129,7 +7129,7 @@
                         {
                             time: n,
                             pos: 1
-                        }
+                        }, 
                     ];
                     var a, o, r, l, s, u = [], d = [
                         e
@@ -7425,7 +7425,7 @@
                 1: 1,
                 25: 25,
                 45: 45
-            }
+            }, 
         ]
     }, {
     }, [
