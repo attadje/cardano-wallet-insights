@@ -17,7 +17,7 @@ export const reward_history = async function (stake_adrr) {
     rewards.push(item.amount);
   });
 
-  return { x: epochs, y: rewards };
+  return { epochs: epochs, rewards: rewards };
 
   //cardano-mainnet.blockfrost.io/api/v0/accounts/{stake_address}/rewards
 };
