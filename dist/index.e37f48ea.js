@@ -526,12 +526,16 @@ var _rewardsHistViewJs = require("./views/rewardsHistView.js");
 var _rewardsHistViewJsDefault = parcelHelpers.interopDefault(_rewardsHistViewJs);
 var _utilJs = require("./util.js");
 const controlRewardsHist = async function() {
+    _rewardsHistViewJsDefault.default.renderSpiner();
     const rewards_hist = await _modelJs.reward_history(_config.STAKE_ADDR);
-    const adaRewards = rewards_hist.rewards.flatMap((x)=>_utilJs.lovelanceToAda(x)
+    const rewards = rewards_hist.rewards.flatMap((x)=>_utilJs.lovelanceToAda(x)
     );
-    _rewardsHistViewJsDefault.default.generateChart(rewards_hist.epochs, adaRewards);
+    _rewardsHistViewJsDefault.default.generateChart(rewards_hist.epochs, rewards);
 };
 controlRewardsHist();
+const init = function() {
+};
+init();
 
 },{"./model.js":"Y4A21","./config":"k5Hzs","./views/rewardsHistView.js":"13Alb","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./util.js":"doATT"}],"Y4A21":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -618,6 +622,8 @@ parcelHelpers.export(exports, "AJAX", ()=>AJAX
 );
 parcelHelpers.export(exports, "lovelanceToAda", ()=>lovelanceToAda
 );
+parcelHelpers.export(exports, "nbOfEpochs", ()=>nbOfEpochs
+);
 var _config = require("./config");
 var bf_header = new Headers();
 bf_header.append("project_id", "mainnetiSXrfNxhpPChKCnts2KX9MJ1eQ7exYgb");
@@ -653,98 +659,50 @@ const AJAX = async function(url, uploadData) {
 };
 const lovelanceToAda = (lovelance)=>lovelance / 1000000
 ;
+const nbOfEpochs = (nbOfMonths)=>6 * nbOfEpochs
+;
 
 },{"./config":"k5Hzs","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"13Alb":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-class rewardsHistView {
+var _util = require("../util");
+var _views = require("./views");
+var _viewsDefault = parcelHelpers.interopDefault(_views);
+class rewardsHistView extends _viewsDefault.default {
     _rewardsHistory;
     _epochsHistory;
-    _parentElem = document.querySelector(".rewardsHistory");
+    _classChartID = "rewardsHist";
+    _parentElem = document.querySelector(".rewardsCardBody");
+    _parentCardValueElem = document.querySelector(".amountOfReward");
+    _parentCardBodyElem = document.querySelector(".rewardsCardBody");
+    _parentCardeButtonElem = document.querySelector(".buttonRewardsHist");
+    _buttonID = {
+        oneMEpochs: 6,
+        sixMEpochs: 36,
+        oneYEpochs: 73,
+        maxEpochs: 0
+    };
+    _chartData;
     _calcRewardAmount(rewards) {
         const sumRewards = rewards.reduce((pV, cV)=>pV + cV
         , 0);
         return Number.parseFloat(sumRewards).toFixed(2);
     }
-    _clear() {
-        this._parentElem.innerHTML = "";
-    }
-    _generateMarkup() {
-        return `<div class="card-header">
-        <div class="row">
-          <div class="col-sm-6 text-left">
-            <h5 class="card-category">Rewards History</h5>
-            <h3 class="card-title">
-              <i class="tim-icons icon-bell-55 text-primary"></i>
-              ${this._calcRewardAmount(this._rewardsHistory)}
-            </h3>
-          </div>
-          <div class="col-sm-6">
-            <div
-              class="btn-group btn-group-toggle float-right"
-              data-toggle="buttons"
-            >
-              <label
-                class="btn btn-sm btn-primary btn-simple active"
-                id="mEpochs"
-              >
-                <input type="radio" name="options" checked />
-                <span
-                  class="d-none d-sm-block d-md-block d-lg-block d-xl-block"
-                  >1 m</span
-                >
-                <span class="d-block d-sm-none">
-                  <i class="tim-icons icon-single-02"></i>
-                </span>
-              </label>
-              <label
-                class="btn btn-sm btn-primary btn-simple"
-                id="yEpochs"
-              >
-                <input
-                  type="radio"
-                  class="d-none d-sm-none"
-                  name="options"
-                />
-                <span
-                  class="d-none d-sm-block d-md-block d-lg-block d-xl-block"
-                  >1 a</span
-                >
-                <span class="d-block d-sm-none">
-                  <i class="tim-icons icon-gift-2"></i>
-                </span>
-              </label>
-              <label
-                class="btn btn-sm btn-primary btn-simple"
-                id="allEpochs"
-              >
-                <input type="radio" class="d-none" name="options" />
-                <span
-                  class="d-none d-sm-block d-md-block d-lg-block d-xl-block"
-                  >Max.</span
-                >
-                <span class="d-block d-sm-none">
-                  <i class="tim-icons icon-tap-02"></i>
-                </span>
-              </label>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="card-body">
-        <div class="chart-area">
-          <canvas id="rewardsChart"></canvas>
-        </div>
-      </div>
-    </div>
-    </div>`;
+    _renderRewardsChart() {
+        return this._renderCardBody(`<canvas id="${this._classChartID}"></canvas>`);
     }
     generateChart(epochs, rewards) {
+        // This method generate the chart for the rewards history
         this._rewardsHistory = rewards;
-        this.epochsHistory = epochs;
-        this._clear();
-        this._parentElem.insertAdjacentHTML("afterbegin", this._generateMarkup());
-        const ctx = document.getElementById("rewardsChart").getContext("2d");
+        this._epochsHistory = epochs;
+        const rewardsAmount = this._calcRewardAmount(this._rewardsHistory);
+        // Update the rewards amount
+        this._parentCardValueElem.insertAdjacentHTML("beforeend", this._renderCardValue(`₳ ${rewardsAmount}`));
+        // Render the chart of the rewards history in the body of the card
+        this._parentCardBodyElem.insertAdjacentHTML("afterbegin", this._renderCardBody(this._renderChart()));
+        // Generate the button for selected the range history
+        this._parentCardeButtonElem.insertAdjacentHTML("afterbegin", this._renderCardButtonMarkup());
+        const ctx = document.getElementById(this._classChartID).getContext("2d");
         var gradientStroke = ctx.createLinearGradient(0, 230, 0, 50);
         gradientStroke.addColorStop(1, "rgba(72,72,176,0.1)");
         gradientStroke.addColorStop(0.4, "rgba(72,72,176,0.0)");
@@ -778,11 +736,14 @@ class rewardsHistView {
                 legend: {
                     display: false
                 },
+                layout: {
+                    padding: 6
+                },
                 tooltips: {
                     backgroundColor: "#f5f5f5",
                     titleFontColor: "#333",
                     bodyFontColor: "#666",
-                    bodySpacing: 4,
+                    bodySpacing: 10,
                     xPadding: 12,
                     mode: "nearest",
                     intersect: 0,
@@ -796,12 +757,14 @@ class rewardsHistView {
                             gridLines: {
                                 drawBorder: false,
                                 color: "rgba(225,78,202,0.1)",
-                                zeroLineColor: "rgba(225,78,202,0.1)"
+                                zeroLineColor: "rgba(255,255,255,0)"
                             },
                             ticks: {
-                                // suggestedMin: 60,
+                                beginAtZero: true,
+                                min: 0,
+                                suggestedMin: 0,
                                 // suggestedMax: 125,
-                                padding: 20,
+                                padding: 10,
                                 fontColor: "#9a9a9a",
                                 callback: function(val, index) {
                                     // Hide every 2nd tick label
@@ -819,7 +782,8 @@ class rewardsHistView {
                                 zeroLineColor: "transparent"
                             },
                             ticks: {
-                                padding: 20,
+                                display: false,
+                                padding: 10,
                                 fontColor: "#9a9a9a",
                                 callback: function(val, index) {
                                     // Hide every 2nd tick label
@@ -831,57 +795,179 @@ class rewardsHistView {
                 }
             }
         };
-        var myChartData = new Chart(ctx, config);
-        const threeMonthEpochs = 18.6;
-        if (this._rewardsHistory.length < threeMonthEpochs) {
-            const markup = ``;
-        }
-        document.querySelector("#mEpochs").addEventListener("click", function() {
-            var chart_data = rewards.slice(rewards.length - 18, rewards.length);
-            var data = myChartData.config.data;
-            data.datasets[0].data = chart_data;
-            data.labels = epochs.slice(epochs.length - 18, epochs.length);
-            myChartData.update();
+        this._chartData = new Chart(ctx, config);
+        this._addHandelerButton();
+    // document.querySelector("#maxEpochs").addEventListener("click", function () {
+    //   var chart_data = rewards.slice(
+    //     this._rewardsHistory.length - 4,
+    //     this._rewardsHistory.length
+    //   );
+    //   var data = myChartData.config.data;
+    //   data.datasets[0].data = chart_data;
+    //   data.labels = epochs.slice(
+    //     this._rewardsHistory.length - 4,
+    //     this._rewardsHistory.length
+    //   );
+    //   this._chartData.update();
+    // });
+    // document.querySelector("#allEpochs").addEventListener("click", function () {
+    //   var data = myChartData.config.data;
+    //   data.datasets[0].data = rewards;
+    //   data.labels = epochs;
+    //   myChartData.update();
+    // });
+    // document.querySelector("#yEpochs").addEventListener("click", function () {
+    //   var chart_data = [60, 80, 65, 130, 80, 105, 90, 130, 70, 115, 60, 130];
+    //   var data = myChartData.config.data;
+    //   data.datasets[0].data = chart_data;
+    //   data.labels = chart_labels;
+    //   myChartData.update();
+    // });
+    }
+    _teste(epochsRewarded) {
+        const startEpoch = epochsRewarded == 0 ? 0 : this._rewardsHistory.length - epochsRewarded;
+        const endEpoch = this._rewardsHistory.length;
+        const data = this._rewardsHistory.slice(startEpoch, endEpoch);
+        const chartData = this._chartData.config.data;
+        chartData.datasets[0].data = data;
+        chartData.labels = this._epochsHistory.slice(startEpoch, endEpoch);
+        this._chartData.update();
+    }
+    _addHandelerButton() {
+        Object.entries(this._buttonID).forEach(([classID, epochsRewarded])=>{
+            const buttonElem = document.querySelector(`#${classID}`);
+            if (!buttonElem) return;
+            buttonElem.addEventListener("click", this._teste.bind(this, epochsRewarded));
         });
-        document.querySelector("#allEpochs").addEventListener("click", function() {
-            var data = myChartData.config.data;
-            data.datasets[0].data = rewards;
-            data.labels = epochs;
-            myChartData.update();
-        });
-        document.querySelector("#yEpochs").addEventListener("click", function() {
-            var chart_data = [
-                60,
-                80,
-                65,
-                130,
-                80,
-                105,
-                90,
-                130,
-                70,
-                115,
-                60,
-                130
-            ];
-            var data = myChartData.config.data;
-            data.datasets[0].data = chart_data;
-            data.labels = chart_labels;
-            myChartData.update();
-        });
     }
-    _getLastEpochsRewards(nbOfEpochs) {
-        // This function return the last x number of rewards
-        return this._rewardsHistory.slice(this._rewardsHistory.length - nbOfEpochs, this._rewardsHistory);
-    }
-    _addMaxButton() {
-    }
-    _addYearButton() {
-    }
-    _addThreeMonthButton() {
+    _renderCardButtonMarkup() {
+        this._clearCardButton();
+        return `
+    <label
+      class="btn btn-sm btn-primary btn-simple active"
+      id="oneMEpochs"
+    >
+      <input type="radio" name="options" checked />
+      <span
+        class="d-none d-sm-block d-md-block d-lg-block d-xl-block"
+        >1 m</span
+      >
+      <span class="d-block d-sm-none">
+        1 m
+      </span>
+    </label>
+    <label
+      class="btn btn-sm btn-primary btn-simple
+      id="sixMEpochs" ${this._rewardsHistory > 36.5 ? "" : "disabled"}>
+      <input
+        type="radio"
+        class="d-none d-sm-none"
+        name="options"
+      />
+      <span
+        class="d-none d-sm-block d-md-block d-lg-block d-xl-block"
+        >6 m</span
+      >
+      <span class="d-block d-sm-none">
+        6 m
+      </span>
+    </label>
+    <label
+    class="btn btn-sm btn-primary btn-simple
+    id="oneYEpochs" ${this._rewardsHistory > 73 ? "" : "disabled"}>
+    <input
+      type="radio"
+      class="d-none d-sm-none"
+      name="options"
+    />
+    <span
+      class="d-none d-sm-block d-md-block d-lg-block d-xl-block"
+      >1 a</span
+    >
+    <span class="d-block d-sm-none">
+      1 a
+    </span>
+  </label>
+    <label
+      class="btn btn-sm btn-primary btn-simple"
+      id="maxEpochs"
+    >
+      <input type="radio" class="d-none" name="options" />
+      <span
+        class="d-none d-sm-block d-md-block d-lg-block d-xl-block"
+        >Max.</span
+      >
+      <span class="d-block d-sm-none">
+        Max.
+      </span>
+    </label>
+    `;
     }
 }
 exports.default = new rewardsHistView();
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./views":"8t69M","../util":"doATT"}],"8t69M":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+class View {
+    _clear() {
+        this._parentElem.innerHTML = "";
+    }
+    _clearCardValue() {
+        this._parentCardValueElem.innerHTML = "";
+    }
+    _clearCardBody() {
+        this._parentCardBodyElem.innerHTML = "";
+    }
+    _clearCardButton() {
+        this._parentCardeButtonElem.innerHTML = "";
+    }
+    renderSpiner() {
+        const markup = `
+    <div class="middle">
+      <div class="bar bar1"></div>
+      <div class="bar bar2"></div>
+      <div class="bar bar3"></div>
+      <div class="bar bar4"></div>
+      <div class="bar bar5"></div>
+      <div class="bar bar6"></div>
+      <div class="bar bar7"></div>
+      <div class="bar bar8"></div>
+    </div>
+    `;
+        this._clear();
+        this._parentElem.insertAdjacentHTML("beforeend", markup);
+    }
+    _renderCardValue(value) {
+        this._clearCardValue();
+        return `
+      ${value}
+  `;
+    }
+    _renderCardBody(htmlBody) {
+        this._clearCardBody();
+        return htmlBody;
+    }
+    _renderChart() {
+        return `<canvas id="${this._classChartID}"></canvas>`;
+    }
+    _renderCardButton() {
+        return `<label
+              class="btn btn-sm btn-primary btn-simple active"
+              id="mEpochs"
+            >
+              <input type="radio" name="options" checked />
+              <span
+                class="d-none d-sm-block d-md-block d-lg-block d-xl-block"
+                >1 m</span
+              >
+              <span class="d-block d-sm-none">
+                1 m
+              </span>
+          </label>`;
+    }
+}
+exports.default = View;
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["ddCAb","aenu9"], "aenu9", "parcelRequire3ffb")
 

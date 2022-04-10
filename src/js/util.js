@@ -38,3 +38,6 @@ export const AJAX = async function (url, uploadData = undefined) {
 
 // 1 ADA = 1 million de lovelance
 export const lovelanceToAda = (lovelance) => lovelance / (1000 * 1000);
+
+// Calcul the number of epochs for x month (calc aprox)
+export const nbOfEpochs = (nbOfMonths) => (30 / 5) * nbOfEpochs;

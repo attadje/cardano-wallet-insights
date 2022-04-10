@@ -4,11 +4,17 @@ import rewardsHistView from "./views/rewardsHistView.js";
 import { lovelanceToAda } from "./util.js";
 
 const controlRewardsHist = async function () {
+  rewardsHistView.renderSpiner();
+
   const rewards_hist = await reward_history(STAKE_ADDR);
 
-  const adaRewards = rewards_hist.rewards.flatMap((x) => lovelanceToAda(x));
+  const rewards = rewards_hist.rewards.flatMap((x) => lovelanceToAda(x));
 
-  rewardsHistView.generateChart(rewards_hist.epochs, adaRewards);
+  rewardsHistView.generateChart(rewards_hist.epochs, rewards);
 };
 
 controlRewardsHist();
+
+const init = function () {};
+
+init();
